@@ -1,3 +1,8 @@
+::THIS IS EXPERIMENTAL!!
+
+:: Created by YoshiiShell
+
+
 @echo off
 :: Get current directory and set it as a variable
 set "fullPath=%~dp0"
@@ -49,19 +54,70 @@ if %message1% == 5 dism /Mount-Image /ImageFile:sources\install.wim /Index:7 /Mo
 pause
 
 :menu
+cd C:/Users/%USERNAME%/ISO
 cls
-echo Type 1 to remove AppX programs
-echo Type 2 to remove Windows Update
-echo Type 3 to remove loggers and trackers
-echo Type 4 for a menu to remove more things
-echo Type 5 to save the image to an ISO
+echo Any of these will take you to a menu for more options
+echo .
+echo .
+echo Type 1 - preinstalled programs
+echo Type 2 - System
+echo Type 3 - privacy/tracking
+echo Type 4 - hardware support/drivers
+echo Type 5 for a menu to remove more things
+echo Type 6 to save the image to an ISO
 set /p message2=
 if %message2% == 1 goto :Appx
-if %message2% == 2 goto :Update
+if %message2% == 2 goto :System
 if %message2% == 3 goto :Loggers
-if %message2% == 4 goto :menu2
-if %message2% == 5 goto :end
+if %message2% == 4 goto :Drivers
+if %message2% == 5 goto :menu2
+if %message2% == 6 goto :end
 :: dism /Image:mount /Get-ProvisionedAppxPackages
+
+:system
+echo Type 1 to remove Windows Update
+echo Type 1 to remove Windows Defender
+set /p message4=
+if %message4% == 1 goto :Update
+if %message4% == 2 goto :Defender
+
+:Drivers
+echo Type 1 to remove battery support
+echo Type 2 to remove Bluetooth support
+echo Type 3 to remove Indeo Codec support
+set /p Drivers=
+if %Drivers% == 1 goto :battery
+if %Drivers% == 2 goto :Bluetooth
+if %Drivers% == 3 goto :Indeo
+
+:battery
+cd C:/Users/%USERNAME%/ISO/mount/Windows/System32
+del batmeter.dll
+cd drivers
+del battc
+goto :menu
+
+:Bluetooth
+cd C:/Users/%USERNAME%/ISO/mount/Windows/System32
+del bthudtask.exe
+del BTAGService.dll
+del BthAvctpSvc.dll
+del BthAvrcp.dll
+del BthAvrcpAppSvc.dll
+del bthci.dll
+del BthMtpContextHandler.dll
+del BthpanContextHandler.dll
+del BthRadioMedia.dll
+del bthserv.dll
+del BthTelemetry.dll
+del btpanui.dll
+goto :menu
+
+:Indeo
+echo Bros I'm tired
+timeout 5 > nul
+goto :menu
+
 :Appx
 cls
 echo Type 1 to remove Clipchamp
@@ -309,6 +365,7 @@ dism /image:mount /Remove-ProvisionedAppxPackage /PackageName:Microsoft.StorePur
 goto :appx
 
 :Update
+cd C:/Users/%USERNAME%/ISO
 reg load HKLM\zSOFTWARE "mount\Windows\System32\config\SOFTWARE"
 cd C:/Users/%USERNAME%/ISO/mount/Windows/System32
 :: wuauserv service it looks like
@@ -328,6 +385,10 @@ del wups.dll /f
 del wups2.dll /f
 :: Windows Update System Library
 del wusys.dll /f
+:: Windows Update Health Agent
+del WaaSAssessment.dll
+del WaaSMedicPS.dll
+del WaaSMedicSvc.dll
 reg add "HKLM\zSOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "ExcludeWUDriversInQualityUpdate" /t REG_DWORD /d 1 /f
 reg add "HKLM\zSOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v "DisableWindowsUpdateAccess" /t REG_DWORD /d 1 /f
 reg add "HKLM\zSOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "NoAutoUpdate" /t REG_DWORD /d 1 /f
@@ -337,7 +398,10 @@ reg add "HKLM\zSOFTWARE\Microsoft\WindowsSelfHost\UI\Visibility" /v "HideInsider
 goto :menu
 
 
-
+:Defender
+echo soon...
+timeout 5 > nul
+goto :menu
 
 
 
