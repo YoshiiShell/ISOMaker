@@ -1,6 +1,6 @@
 ::THIS IS EXPERIMENTAL!!
 
-:: Created by YoshiiShell
+:: Created by YoshiiShell, creater of Yet Another Windows Toolbox and NyneDZN, Owner of NeptuneOS
 
 
 @echo off
